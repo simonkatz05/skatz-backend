@@ -7,8 +7,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "npm run migrate && node src/index.js:,
+        "dev": "nodemon src/index.js",
     "migrate": "node src/scripts/migrate.js"
   },
   "dependencies": {
