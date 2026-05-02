@@ -1,5 +1,6 @@
 const AdmZip = require('adm-zip');
-const Database = require('better-sqlite3');
+// Lazy-load better-sqlite3 so a native compilation failure doesn't crash startup
+let Database;
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -27,6 +28,7 @@ async function parseApkg(buffer) {
       throw Object.assign(new Error('Invalid .apkg file: no collection database found'), { status: 400 });
     }
 
+    if (!Database) Database = require('better-sqlite3');
     const db = new Database(dbPath, { readonly: true });
 
     // flds is a \x1f-separated string of fields; first = front, second = back
