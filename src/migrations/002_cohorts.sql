@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS cohorts (
 );
 
 ALTER TABLE users
-  ADD CONSTRAINT IF NOT EXISTS fk_users_cohort
+  ADD CONSTRAINT fk_users_cohort
   FOREIGN KEY (cohort_id) REFERENCES cohorts(id) ON DELETE SET NULL;
