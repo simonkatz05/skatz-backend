@@ -28,7 +28,16 @@ async function parseApkg(buffer) {
       throw Object.assign(new Error('Invalid .apkg file: no collection database found'), { status: 400 });
     }
 
-    if (!Database) Database = require('better-sqlite3');
+    if (!Database) {
+      try {
+        Database = require('better-sqlite3');
+      } catch {
+        throw Object.assign(
+          new Error('Anki import is unavailable: better-sqlite3 native module could not be loaded'),
+          { status: 503 }
+        );
+      }
+    }
     const db = new Database(dbPath, { readonly: true });
 
     // flds is a \x1f-separated string of fields; first = front, second = back

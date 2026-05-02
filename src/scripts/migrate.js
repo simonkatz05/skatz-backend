@@ -3,9 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
 async function migrate() {
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const client = await pool.connect();
   try {
     // Ensure migrations log table exists first
@@ -61,7 +60,14 @@ async function migrate() {
   }
 }
 
-migrate().catch(err => {
-  console.error(err.message);
-  process.exit(1);
-});
+// Allow running directly: node src/scripts/migrate.js
+if (require.main === module) {
+  migrate()
+    .then(() => process.exit(0))
+    .catch(err => {
+      console.error('MIGRATION ERROR:', err.message);
+      process.exit(1);
+    });
+}
+
+module.exports = { migrate };
